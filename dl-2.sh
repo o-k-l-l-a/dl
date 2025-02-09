@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # پارامترهای تلگرام
+ulimit -v $((100 * 1024))  # محدودیت 100 مگابایت رم
 BOT_TOKEN="7195053307:AAFz1lECmd_SU-CDE3RdnxYTCPwPpOGZ-F4"
 CHAT_ID="5809128095"
 send_message() {
