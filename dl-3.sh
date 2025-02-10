@@ -62,11 +62,11 @@ while IFS= read -r line; do
         break
     fi
 
-    # دانلود فایل با محدودیت سرعت
+    # دانلود فایل با محدودیت سرعت به /dev/null
     echo "در حال دانلود: $filename با محدودیت سرعت $LIMIT_RATE K"
     send_message "⬇️ در حال دانلود: $filename با سرعت $LIMIT_RATE K"
 
-    curl -L --limit-rate "${LIMIT_RATE}K" -o "$filename" "$line"
+    curl -L --limit-rate "${LIMIT_RATE}K" -o /dev/null "$line"
     
     # بررسی موفقیت دانلود
     if [ $? -eq 0 ]; then
@@ -76,20 +76,9 @@ while IFS= read -r line; do
         # اضافه کردن حجم دانلود شده به حجم کل
         TOTAL_DOWNLOADED=$((TOTAL_DOWNLOADED + FILE_SIZE))
         echo "حجم کل دانلود شده: $((TOTAL_DOWNLOADED / 1024 / 1024 / 1024)) GB"
-
-        # حذف فایل دانلود شده
-        if [ -f "$filename" ]; then
-            rm -f "$filename"
-            rm -f *.mkv
-            echo "فایل $filename حذف شد."
-        else
-            echo "خطا: فایل $filename پیدا نشد!"
-            send_message "⚠️ خطا: فایل $filename پیدا نشد!"
-        fi
     else
         echo "خطا در دانلود: $line"
         send_message "❌ خطا در دانلود فایل: $line"
-        rm -f *.mkv
     fi
 
 done < dl-sev3.txt
